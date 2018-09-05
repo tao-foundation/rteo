@@ -1,68 +1,57 @@
 # TEO (TrustETHreOrigin) PoW chain.
-## You can refer what is TEO  and what is TAO go to this URL [TEO Materials and Documents|https://github.com/trustfarm/teo-material ]
+## You can refer what is TEO  and what is TAO go to this URL [TEO Materials and Documents|https://github.com/tao-foundation/teo-material ]
+
+----------------------
+
+# rteo is based on Parity - fast, light, and robust Ethereum client
 
 #
 #  Using Binary download
 #  
-## [» Download the rteo windows release rteo.win10.zip «](https://github.com/trustfarm/rteo/raw/master/target/release/rteo.win10.zip) 
-## [» Download the rteo Linux   release rteo.linux.zip «](https://github.com/trustfarm/rteo/raw/master/target/release/rteo.linux.zip) 
+## [» Download the rteo windows release rteo.win10.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.win10.zip) 
+## [» Download the rteo Linux   release rteo.linux.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.linux.zip) 
 #
 #  After download binary and unzip it
 #  run examples
 #  rteo --chain=teotest
 # 
 
-----------------------
-
-# Original Parity - fast, light, and robust Ethereum client
-
-[» Download the latest release «](https://github.com/paritytech/parity/releases/latest)
-
-[![build status](https://gitlab.parity.io/parity/parity/badges/master/build.svg)](https://gitlab.parity.io/parity/parity/commits/master)
-[![codecov](https://codecov.io/gh/paritytech/parity/branch/master/graph/badge.svg)](https://codecov.io/gh/paritytech/parity)
-[![Snap Status](https://build.snapcraft.io/badge/paritytech/parity.svg)](https://build.snapcraft.io/user/paritytech/parity)
-[![GPLv3](https://img.shields.io/badge/license-GPL%20v3-green.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-
 
 ### Join the chat!
 
-Get in touch with us on Gitter:
-[![Gitter: Parity](https://img.shields.io/badge/gitter-parity-4AB495.svg)](https://gitter.im/paritytech/parity)
-[![Gitter: Parity.js](https://img.shields.io/badge/gitter-parity.js-4AB495.svg)](https://gitter.im/paritytech/parity.js)
-[![Gitter: Parity/Miners](https://img.shields.io/badge/gitter-parity/miners-4AB495.svg)](https://gitter.im/paritytech/parity/miners)
-[![Gitter: Parity-PoA](https://img.shields.io/badge/gitter-parity--poa-4AB495.svg)](https://gitter.im/paritytech/parity-poa)
+Get in touch with us on Telegram and Online Forum:
+[![Telegram](https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg)](https://t.me/trustfarmblockchaintalk)
+[![TAOForum](https://forum.tao.foundation/assets/uploads/system/site-logo.png)](https://forum.tao.foundation)
 
-Or join our community on Matrix:
-[![Riot: +Parity](https://img.shields.io/badge/riot-%2Bparity%3Amatrix.parity.io-orange.svg)](https://riot.im/app/#/group/+parity:matrix.parity.io)
+### Sites informations
 
-Official website: https://parity.io
+Official website: https://www.tao.foundation
 
-Be sure to check out [our wiki](https://wiki.parity.io) for more information.
+Here is space of discussion for New TAO Universal Blockchain Architecture.
 
+* [TAO Foundation homepage](https://tao.foundation)
+* [TAO Foundation Forum](https://forum.tao.foundation)
+* [TEO Project  client repository](https://github.com/tao-foundation/rteo)
+* [TEO Material includes resources for TEO, you can arrive here](https://github.com/tao-foundation/teo-material)
+* [TEO Testnet Explorer](https://teoexplorer.tao.ac)
+* [TEO Testnet Wallet](https://wallet.tao.ac)
+* [TEO Testnet Bounty Program v0.3](https://github.com/tao-foundation/teo-material/blob/master/documents/TEO-Airdrop-BountyProgram-v0.3.pdf)
+
+Please enjoy this projects,
+We are open community  on your contribution and particiaption.
 ----
 
-## About Parity
+## About TEO (Trust Eth-re-Origin) Blockchain
 
-Parity's goal is to be the fastest, lightest, and most secure Ethereum client. We are developing Parity using the sophisticated and cutting-edge Rust programming language. Parity is licensed under the GPLv3, and can be used for all your Ethereum needs.
+TEO is First phase of TAO Blockchain architecture Project.
 
-Parity comes with a built-in wallet, to install it please follow [these instructions](https://wiki.parity.io/Parity-Wallet). It includes various functionality allowing you to:
-
-- create and manage your Ethereum accounts;
+You can do with rteo clients.
+- create and manage your TAO Accounts and Ethereum accounts;
+- manage your TAO Tokens and Coins [TEO, TEOS, TEOA , iTAO] and Future allocated ERC Tokens.
 - manage your Ether and any Ethereum tokens;
-- create and register your own tokens;
-- and much more.
+- create and register your own contract tokens;
+- and chain exploreration.
 
-From Parity Ethereum client version >=1.10, the User Interface (UI) is accessible in a separate application called Parity UI. To keep using the UI in the browser (deprecated), [follow these steps](https://wiki.parity.io/FAQ-Basic-Operations,-Configuration,-and-Synchronization.md#the-parity-ui-application-isnt-working-the-way-i-want).
-
-By default, Parity will also run a JSONRPC server on `127.0.0.1:8545` and a websockets server on `127.0.0.1:8546`. This is fully configurable and supports a number of APIs.
-
-If you run into an issue while using Parity, feel free to file one in this repository or hop on our [Gitter](https://gitter.im/paritytech/parity) or [Riot](https://riot.im/app/#/group/+parity:matrix.parity.io) chat room to ask a question. We are glad to help!
-
-**For security-critical issues**, please refer to the security policy outlined in [SECURITY.MD](SECURITY.md).
-
-Parity's current release is 1.9. You can download it at https://github.com/paritytech/parity/releases or follow the instructions below to build from source.
-
-----
 
 ## Build dependencies
 
@@ -75,7 +64,7 @@ We recommend installing Rust through [rustup](https://www.rustup.rs/). If you do
 	$ curl https://sh.rustup.rs -sSf | sh
 	```
 
-	Parity also requires `gcc`, `g++`, `libssl-dev`/`openssl`, `libudev-dev` and `pkg-config` packages to be installed.
+	rteo also requires `gcc`, `g++`, `libssl-dev`/`openssl`, `libudev-dev` and `pkg-config` packages to be installed.
 
 - OSX:
 	```bash
@@ -99,25 +88,7 @@ Make sure that these binaries are in your `PATH`. After that you should be able 
 
 ----
 
-## Install from the snap store
-
-In any of the [supported Linux distros](https://snapcraft.io/docs/core/install):
-
-```bash
-sudo snap install parity
-```
-
-Or, if you want to contribute testing the upcoming release:
-
-```bash
-sudo snap install parity --beta
-```
-
-And to test the latest code landed into the master branch:
-
-```bash
-sudo snap install parity --edge
-```
+## we will not recommend to use snap. for old linux platforms [eg. <~ Ubuntu 14.04]
 
 ----
 
@@ -125,8 +96,8 @@ sudo snap install parity --edge
 
 ```bash
 # download Parity code
-$ git clone https://github.com/paritytech/parity
-$ cd parity
+$ git clone https://github.com/tao-foundation/rteo
+$ cd rteo
 
 # build in release mode
 $ cargo build --release
@@ -168,34 +139,23 @@ first.
 
 ----
 
-## Simple one-line installer for Mac and Ubuntu
-
-```bash
-bash <(curl https://get.parity.io -Lk)
-```
-
-The one-line installer always defaults to the latest beta release. To install a stable release, run:
-
-```bash
-bash <(curl https://get.parity.io -Lk) -r stable
-```
-
-## Start Parity
+## Start rteo
 
 ### Manually
 
-To start Parity manually, just run
+To start rteo testnet manually, just run
 
 ```bash
-$ ./target/release/parity
+$ ./target/release/rteo --chain=teotest
 ```
 
-and Parity will begin syncing the Ethereum blockchain.
+and rteo will begin syncing the TEO testnet blockchain.
 
 ### Using systemd service file
 
 To start Parity as a regular user using systemd init:
 
-1. Copy `./scripts/parity.service` to your
+1. Copy `./scripts/rteo.service` to your
 systemd user directory (usually `~/.config/systemd/user`).
-2. To configure Parity, write a `/etc/parity/config.toml` config file, see [Configuring Parity](https://paritytech.github.io/wiki/Configuring-Parity) for details.
+2. To configure Parity, write a `${HOME}/config.toml` config file, see [Configuring rteo - it is most of options are compatible with parity](https://paritytech.github.io/wiki/Configuring-Parity) for details.
+
