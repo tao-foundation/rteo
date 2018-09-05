@@ -23,9 +23,11 @@
 ## Join the chat!
 
 Get in touch with us on Telegram and Online Forum: <br>
-[![Telegram](https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg=64x)](https://t.me/trustfarmblockchaintalk) <br>
-[![TAOForum](https://forum.tao.foundation/assets/uploads/system/site-logo.png=64x)](https://forum.tao.foundation) <br>
+ 
+ * [<img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="32"> Telegram Chat](https://t.me/trustfarmblockchaintalk) <br>
 
+ * [<img src="https://forum.tao.foundation/assets/uploads/system/site-logo.png" width="32"> TAO Forum](https://forum.tao.foundation) <br>
+ 
 ## Sites informations
 
 Here is space of discussion for New TAO Universal Blockchain Architecture.
