@@ -1,31 +1,32 @@
 # TEO (TrustETHreOrigin) PoW chain.
-## You can refer what is TEO  and what is TAO go to this URL [TEO Materials and Documents|https://github.com/tao-foundation/teo-material ]
+## You can refer what is TEO  and what is TAO go to this URL [TEO Materials and Documents](https://github.com/tao-foundation/teo-material)
 
 ----------------------
 
-# rteo is based on Parity - fast, light, and robust Ethereum client
+# rteo is based on Parity - fast, light, and robust client
 
-#
-#  Using Binary download
-#  
-## [» Download the rteo windows release rteo.win10.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.win10.zip) 
-## [» Download the rteo Linux   release rteo.linux.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.linux.zip) 
-#
-#  After download binary and unzip it
-#  run examples
-#  rteo --chain=teotest
-# 
+##
+##  Using Binary download
+##  
+### [» Download the rteo windows release rteo.win10.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.win10.zip) 
+### [» Download the rteo Linux( > Ubuntu16.04 )   release rteo.linux.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.linux.zip) 
+##
+##  After download binary and unzip it
+  run examples
+```
+ rteo --chain=teotest
+```
 
 
-### Join the chat!
+----------------------
 
-Get in touch with us on Telegram and Online Forum:
-[![Telegram](https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg)](https://t.me/trustfarmblockchaintalk)
-[![TAOForum](https://forum.tao.foundation/assets/uploads/system/site-logo.png)](https://forum.tao.foundation)
+## Join the chat!
 
-### Sites informations
+Get in touch with us on Telegram and Online Forum: <br>
+[![Telegram](https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg=64x)](https://t.me/trustfarmblockchaintalk) <br>
+[![TAOForum](https://forum.tao.foundation/assets/uploads/system/site-logo.png=64x)](https://forum.tao.foundation) <br>
 
-Official website: https://www.tao.foundation
+## Sites informations
 
 Here is space of discussion for New TAO Universal Blockchain Architecture.
 
@@ -33,12 +34,13 @@ Here is space of discussion for New TAO Universal Blockchain Architecture.
 * [TAO Foundation Forum](https://forum.tao.foundation)
 * [TEO Project  client repository](https://github.com/tao-foundation/rteo)
 * [TEO Material includes resources for TEO, you can arrive here](https://github.com/tao-foundation/teo-material)
-* [TEO Testnet Explorer](https://teoexplorer.tao.ac)
-* [TEO Testnet Wallet](https://wallet.tao.ac)
-* [TEO Testnet Bounty Program v0.3](https://github.com/tao-foundation/teo-material/blob/master/documents/TEO-Airdrop-BountyProgram-v0.3.pdf)
+* [TEO Explorer](https://teoexplorer.tao.ac)
+* [TEO Wallet](https://wallet.tao.ac)
+* [TEO Bounty Program v0.3](https://github.com/tao-foundation/teo-material/blob/master/documents/TEO-Airdrop-BountyProgram-v0.3.pdf)
 
 Please enjoy this projects,
 We are open community  on your contribution and particiaption.
+
 ----
 
 ## About TEO (Trust Eth-re-Origin) Blockchain
@@ -55,7 +57,7 @@ You can do with rteo clients.
 
 ## Build dependencies
 
-**Parity requires Rust version 1.23.0 to build**
+**rteo requires Rust version 1.23.0 to build**
 
 We recommend installing Rust through [rustup](https://www.rustup.rs/). If you don't already have rustup, you can install it like this:
 
@@ -88,7 +90,7 @@ Make sure that these binaries are in your `PATH`. After that you should be able 
 
 ----
 
-## we will not recommend to use snap. for old linux platforms [eg. <~ Ubuntu 14.04]
+### We will not recommend to use snap. for old linux platforms [eg. <~ Ubuntu 14.04]
 
 ----
 
