@@ -161,6 +161,11 @@ pub struct EthashParams {
 	/// See main EthashParams docs.
 	#[serde(rename="teip0testEndTransition")]
 	pub teip0_testend_transition: Option<Uint>,
+
+	/// See main TEthashParams docs.
+	#[serde(rename="teip1TETHASHV1Transition")]
+	pub teip1_tethashv1_transition: Option<Uint>,
+
 }
 
 /// Ethash engine deserialization.
@@ -285,6 +290,7 @@ mod tests {
 				teip0_ssz_reward: None,
 				teip0_ssz_account: None,
 				teip0_testend_transition: None,
+				teip1_tethashv1_transition: None,
 			}
 		});
 	}
@@ -339,6 +345,7 @@ mod tests {
 				teip0_ssz_reward: None,
 				teip0_ssz_account: None,
 				teip0_testend_transition: None,
+				teip1_tethashv1_transition: None,
 			}
 		});
 	}

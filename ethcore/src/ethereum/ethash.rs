@@ -146,6 +146,8 @@ pub struct EthashParams {
 	pub teip0_ssz_account: Address,
 	/// Number of block where TEIP-0 TestNet v1 suiside.
 	pub teip0_testend_transition: u64,
+	/// Number of block where TEIP-1 TEthashv1 transition.
+	pub teip1_tethashv1_transition: u64,
 }
 
 impl From<ethjson::spec::EthashParams> for EthashParams {
@@ -182,6 +184,7 @@ impl From<ethjson::spec::EthashParams> for EthashParams {
 			teip0_ssz_reward: p.teip0_ssz_reward.map_or(U256::from(0), Into::into),
 			teip0_ssz_account: p.teip0_ssz_account.map_or_else(Address::new, Into::into),
 			teip0_testend_transition: p.teip0_testend_transition.map_or(u64::max_value(), Into::into),
+			teip1_tethashv1_transition: p.teip1_tethashv1_transition.map_or(u64::max_value(), Into::into),
 		}
 	}
 }
@@ -278,6 +281,10 @@ impl Engine<EthereumMachine> for Arc<Ethash> {
 			self.ethash_params.block_reward
 		};
 		
+		if number == self.ethash_params.teip1_tethashv1_transition {
+			trace!(target: "ethash", "Algorithm Version Blocknumber = {}", self.ethash_params.teip1_tethashv1_transition);
+		};
+
 		if number >= self.ethash_params.teip0_testend_transition {
 			panic!("TEO TestNet v0.1 Suiside:: will not go futher 1M Block. You use updated testnet client consensus");
 		};
@@ -729,6 +736,7 @@ mod tests {
 			teip0_ssz_reward: 0.into(),
 			teip0_ssz_account: "0000000000000000000000000000000000000001".into(),
 			teip0_testend_transition: u64::max_value(),
+			teip1_tethashv1_transition: u64::max_value(),
 		}
 	}
 

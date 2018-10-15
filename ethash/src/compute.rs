@@ -274,29 +274,11 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 				}else {
 					fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
 				}
-			/*
-				unsafe {
-					if algorithm_version == 0x101	// TethashV1
-					{
-						fnv1a_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
-					}
-					else
-					{
-						fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
-					}
-				}
-			*/
 		};
 
 		unroll! {
 			// MIX_NODES
 			for n in 0..2 {
-				/*
-				let tmp_node = calculate_dag_item(
-					index * MIX_NODES as u32 + n as u32,
-					cache,
-				);
-				*/
 				let tmp_node = calculate_dag_item( index * MIX_NODES as u32 + n as u32, cache,);
 
 				unroll! {
@@ -343,25 +325,6 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 								reduction = fnv_hash( reduction, mix_words[w + 3]);
 								compress[i] = reduction;
 						}
-
-/*
-					unsafe {
-						if algorithm_version == 0x101	{ // TethashV1
-								let mut reduction = mix_words[w + 0];
-								reduction = fnv1a_hash( reduction, mix_words[w + 1]);
-								reduction = fnv1a_hash( reduction, mix_words[w + 2]);
-								reduction = fnv1a_hash( reduction, mix_words[w + 3]);
-								compress[i] = reduction;
-						} 
-						else {
-								let mut reduction = mix_words[w + 0];
-								reduction = fnv_hash( reduction, mix_words[w + 1]);
-								reduction = fnv_hash( reduction, mix_words[w + 2]);
-								reduction = fnv_hash( reduction, mix_words[w + 3]);
-								compress[i] = reduction;
-						}
-					};
-*/
 				}
 		}
 	}
@@ -401,7 +364,6 @@ fn calculate_dag_item(node_index: u32, cache: &[Node]) -> Node {
 	debug_assert_eq!(NODE_WORDS, 16);
 	for i in 0..ETHASH_DATASET_PARENTS as u32 {
 		let mut parent_index :u32 = 0;
-			//unsafe {
 				if algtype == 0x101	{ // TethashV1
 					parent_index = fnv1a_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
 						num_parent_nodes as u32;
@@ -410,20 +372,17 @@ fn calculate_dag_item(node_index: u32, cache: &[Node]) -> Node {
 					parent_index = fnv_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
 						num_parent_nodes as u32;
 				}
-			//};
 		let parent = &cache[parent_index as usize];
 
 		unroll! {
 			
 			for w in 0..16 {
-				//unsafe {
 					if algtype == 0x101	{ // TethashV1
 						ret.as_words_mut()[w] = fnv1a_hash(ret.as_words()[w], parent.as_words()[w]);
 					}
 					else {
 						ret.as_words_mut()[w] = fnv_hash(ret.as_words()[w], parent.as_words()[w]);
 					}
-				//};
 			}
 
 		}
