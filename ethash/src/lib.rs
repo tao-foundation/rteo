@@ -55,10 +55,12 @@ struct LightCache {
 }
 
 /// Light/Full cache manager.
+/// if TEthash Starts with enum 0x101 , algorithm == 0x101 means TethashV1
 pub struct EthashManager {
 	nodecache_builder: NodeCacheBuilder,
 	cache: Mutex<LightCache>,
 	cache_dir: PathBuf,
+	algorithm: u32,
 }
 
 impl EthashManager {
@@ -73,6 +75,7 @@ impl EthashManager {
 				prev_epoch: None,
 				prev: None,
 			}),
+			algorithm: 0x101,		// init to TEthashV1
 		}
 	}
 

@@ -1,3 +1,46 @@
+/*
+  (C)TAO.Foundation for TETHASHV1 modification. GPL V3 License term.
+  https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function#FNV-1_hash
+
+  FNV_hash0 is depricated
+  use FNV1 hash
+
+use hash offset
+FNV-1a hash
+The FNV-1a hash differs from the FNV-1 hash by only the order in which the multiply and XOR is performed:[8][10]
+
+   hash = FNV_offset_basis
+   for each byte_of_data to be hashed
+   	hash = hash XOR byte_of_data
+   	hash = hash × FNV_prime
+   return hash
+
+Size in bits
+{\displaystyle n=2^{s}} {\displaystyle n=2^{s}}
+
+FNV prime	FNV offset basis
+32	224 + 28 + 0x93 = 16777619
+
+2166136261 = 0x811c9dc5
+
+-- reference OpenCL implementation
+
+#define __TETHASHV1__
+#undef __ETHASH__
+
+#define FNV_PRIME 0x01000193U
+#define FNV_OFFSET_BASIS  0x811c9dc5U
+
+#ifdef __ETHASH__
+#define fnv(x, y)        ((x) * FNV_PRIME ^ (y))
+#else  // default __TETHASHV1__ 
+#define fnv(x, y)         ((((FNV_OFFSET_BASIS^(x))*FNV_PRIME) ^ (y)) * FNV_PRIME)
+#endif
+#define fnv_reduce(v)    fnv(fnv(fnv(v.x, v.y), v.z), v.w)
+
+*/
+
+
 // Copyright 2015-2017 Parity Technologies (UK) Ltd.
 // This file is part of Parity.
 
@@ -32,6 +75,8 @@ use std::ptr;
 const MIX_WORDS: usize = ETHASH_MIX_BYTES / 4;
 const MIX_NODES: usize = MIX_WORDS / NODE_WORDS;
 const FNV_PRIME: u32 = 0x01000193;
+const FNV_OFFSET_BASIS: u32 = 0x811c9dc5;
+static  mut  ALGORITHM_VERSION : u32 = 0x101;		// 0x101 : TEthashV1 , 0 : ethash , others ==> reserved.
 
 /// Computation result
 pub struct ProofOfWork {
@@ -92,6 +137,12 @@ pub fn slow_hash_block_number(block_number: u64) -> H256 {
 
 fn fnv_hash(x: u32, y: u32) -> u32 {
 	return x.wrapping_mul(FNV_PRIME) ^ y;
+}
+
+fn fnv1a_hash(x: u32, y: u32) -> u32 {
+	let mut val: u32 = (FNV_OFFSET_BASIS ^ x)*FNV_PRIME;
+	val = ( val ^ y )* FNV_PRIME;
+	return val;
 }
 
 /// Difficulty quick check for POW preverification
@@ -205,6 +256,9 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 	let cache: &[Node] = light.cache.as_ref();
 	let first_val = buf.half_mix.as_words()[0];
 
+	// set current HashAlgorithm from Global Variable.
+	let algtype = unsafe {ALGORITHM_VERSION};
+
 	debug_assert_eq!(MIX_NODES, 2);
 	debug_assert_eq!(NODE_WORDS, 16);
 
@@ -214,26 +268,46 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 			// asserted in debug builds (see the definition of `make_const_array!`).
 			let mix_words: &mut [u32; MIX_WORDS] =
 				unsafe { make_const_array!(MIX_WORDS, &mut mix) };
-
-			fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+			
+				if algtype == 0x101 {	// TethashV1
+					fnv1a_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+				}else {
+					fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+				}
+			/*
+				unsafe {
+					if algorithm_version == 0x101	// TethashV1
+					{
+						fnv1a_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+					}
+					else
+					{
+						fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+					}
+				}
+			*/
 		};
 
 		unroll! {
 			// MIX_NODES
 			for n in 0..2 {
+				/*
 				let tmp_node = calculate_dag_item(
 					index * MIX_NODES as u32 + n as u32,
 					cache,
 				);
+				*/
+				let tmp_node = calculate_dag_item( index * MIX_NODES as u32 + n as u32, cache,);
 
 				unroll! {
 					// NODE_WORDS
 					for w in 0..16 {
-						mix[n].as_words_mut()[w] =
-							fnv_hash(
-								mix[n].as_words()[w],
-								tmp_node.as_words()[w],
-							);
+								if algtype == 0x101 {	// TethashV1
+									mix[n].as_words_mut()[w] = fnv1a_hash( mix[n].as_words()[w], tmp_node.as_words()[w], );
+								}
+								else {
+									mix[n].as_words_mut()[w] = fnv_hash( mix[n].as_words()[w], tmp_node.as_words()[w], );
+								}
 					}
 				}
 			}
@@ -253,15 +327,42 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 		// Compress mix
 		debug_assert_eq!(MIX_WORDS / 4, 8);
 		unroll! {
-			for i in 0..8 {
-				let w = i * 4;
+				for i in 0..8 {
+					let w = i * 4;
+						if algtype == 0x101	{ // TethashV1
+								let mut reduction = mix_words[w + 0];
+								reduction = fnv1a_hash( reduction, mix_words[w + 1]);
+								reduction = fnv1a_hash( reduction, mix_words[w + 2]);
+								reduction = fnv1a_hash( reduction, mix_words[w + 3]);
+								compress[i] = reduction;
+						} 
+						else {
+								let mut reduction = mix_words[w + 0];
+								reduction = fnv_hash( reduction, mix_words[w + 1]);
+								reduction = fnv_hash( reduction, mix_words[w + 2]);
+								reduction = fnv_hash( reduction, mix_words[w + 3]);
+								compress[i] = reduction;
+						}
 
-				let mut reduction = mix_words[w + 0];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 1];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 2];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 3];
-				compress[i] = reduction;
-			}
+/*
+					unsafe {
+						if algorithm_version == 0x101	{ // TethashV1
+								let mut reduction = mix_words[w + 0];
+								reduction = fnv1a_hash( reduction, mix_words[w + 1]);
+								reduction = fnv1a_hash( reduction, mix_words[w + 2]);
+								reduction = fnv1a_hash( reduction, mix_words[w + 3]);
+								compress[i] = reduction;
+						} 
+						else {
+								let mut reduction = mix_words[w + 0];
+								reduction = fnv_hash( reduction, mix_words[w + 1]);
+								reduction = fnv_hash( reduction, mix_words[w + 2]);
+								reduction = fnv_hash( reduction, mix_words[w + 3]);
+								compress[i] = reduction;
+						}
+					};
+*/
+				}
 		}
 	}
 
@@ -289,20 +390,42 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 fn calculate_dag_item(node_index: u32, cache: &[Node]) -> Node {
 	let num_parent_nodes = cache.len();
 	let mut ret = cache[node_index as usize % num_parent_nodes].clone();
+
+	// set current HashAlgorithm from Global Variable.
+	let algtype = unsafe {ALGORITHM_VERSION};
+
 	ret.as_words_mut()[0] ^= node_index;
 
 	keccak_512::inplace(ret.as_bytes_mut());
 
 	debug_assert_eq!(NODE_WORDS, 16);
 	for i in 0..ETHASH_DATASET_PARENTS as u32 {
-		let parent_index = fnv_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
-			num_parent_nodes as u32;
+		let mut parent_index :u32 = 0;
+			//unsafe {
+				if algtype == 0x101	{ // TethashV1
+					parent_index = fnv1a_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
+						num_parent_nodes as u32;
+				}
+				else {
+					parent_index = fnv_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
+						num_parent_nodes as u32;
+				}
+			//};
 		let parent = &cache[parent_index as usize];
 
 		unroll! {
+			
 			for w in 0..16 {
-				ret.as_words_mut()[w] = fnv_hash(ret.as_words()[w], parent.as_words()[w]);
+				//unsafe {
+					if algtype == 0x101	{ // TethashV1
+						ret.as_words_mut()[w] = fnv1a_hash(ret.as_words()[w], parent.as_words()[w]);
+					}
+					else {
+						ret.as_words_mut()[w] = fnv_hash(ret.as_words()[w], parent.as_words()[w]);
+					}
+				//};
 			}
+
 		}
 	}
 
