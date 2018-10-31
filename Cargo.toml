@@ -2,7 +2,7 @@
 description = "rteo Parity TEO client"
 name = "rteo"
 # NOTE Make sure to update util/version/Cargo.toml as well
-version = "1.12.1"
+version = "1.12.2"
 license = "GPL-3.0"
 authors = ["trustfarm.io <info@trustfarm.net> , Parity Technologies <admin@parity.io>"]
 
