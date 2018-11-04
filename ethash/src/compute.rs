@@ -31,6 +31,7 @@ use std::path::Path;
 const MIX_WORDS: usize = ETHASH_MIX_BYTES / 4;
 const MIX_NODES: usize = MIX_WORDS / NODE_WORDS;
 const FNV_PRIME: u32 = 0x01000193;
+const FNV_OFFSET_BASIS: u32 = 0x811c9dc5;
 
 /// Computation result
 pub struct ProofOfWork {
@@ -91,6 +92,12 @@ pub fn slow_hash_block_number(block_number: u64) -> H256 {
 
 fn fnv_hash(x: u32, y: u32) -> u32 {
 	return x.wrapping_mul(FNV_PRIME) ^ y;
+}
+
+fn fnv1a_hash(x: u32, y: u32) -> u32 {
+	let mut val: u32 = (FNV_OFFSET_BASIS ^ x)*FNV_PRIME;
+	val = ( val ^ y )* FNV_PRIME;
+	return val;
 }
 
 /// Difficulty quick check for POW preverification
@@ -214,7 +221,7 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 			let mix_words: &mut [u32; MIX_WORDS] =
 				unsafe { make_const_array!(MIX_WORDS, &mut mix) };
 
-			fnv_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
+			fnv1a_hash(first_val ^ i, mix_words[i as usize % MIX_WORDS]) % num_full_pages
 		};
 
 		unroll! {
@@ -229,7 +236,7 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 					// NODE_WORDS
 					for w in 0..16 {
 						mix[n].as_words_mut()[w] =
-							fnv_hash(
+							fnv1a_hash(
 								mix[n].as_words()[w],
 								tmp_node.as_words()[w],
 							);
@@ -256,9 +263,9 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 				let w = i * 4;
 
 				let mut reduction = mix_words[w + 0];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 1];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 2];
-				reduction = reduction.wrapping_mul(FNV_PRIME) ^ mix_words[w + 3];
+				reduction = fnv1a_hash( reduction, mix_words[w + 1]);
+				reduction = fnv1a_hash( reduction, mix_words[w + 2]);
+				reduction = fnv1a_hash( reduction, mix_words[w + 3]);
 				compress[i] = reduction;
 			}
 		}
@@ -272,7 +279,7 @@ fn hash_compute(light: &Light, full_size: usize, header_hash: &H256, nonce: u64)
 		// We overwrite the second half since `keccak_256` has an internal buffer and so allows
 		// overlapping arrays as input.
 		let write_ptr: *mut u8 = &mut buf.compress_bytes as *mut [u8; 32] as *mut u8;
-		unsafe { 
+		unsafe {
 			keccak_256::unchecked(
 				write_ptr,
 				buf.compress_bytes.len(),
@@ -296,13 +303,13 @@ fn calculate_dag_item(node_index: u32, cache: &[Node]) -> Node {
 
 	debug_assert_eq!(NODE_WORDS, 16);
 	for i in 0..ETHASH_DATASET_PARENTS as u32 {
-		let parent_index = fnv_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
+		let parent_index = fnv1a_hash(node_index ^ i, ret.as_words()[i as usize % NODE_WORDS]) %
 			num_parent_nodes as u32;
 		let parent = &cache[parent_index as usize];
 
 		unroll! {
 			for w in 0..16 {
-				ret.as_words_mut()[w] = fnv_hash(ret.as_words()[w], parent.as_words()[w]);
+				ret.as_words_mut()[w] = fnv1a_hash(ret.as_words()[w], parent.as_words()[w]);
 			}
 		}
 	}
