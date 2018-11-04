@@ -19,7 +19,7 @@
 
 #[cfg(feature = "jni")]
 extern crate jni;
-extern crate parity_ethereum;
+extern crate rteo;
 extern crate panic_hook;
 
 use std::os::raw::{c_char, c_void, c_int};
@@ -63,7 +63,7 @@ pub unsafe extern fn parity_config_from_cli(args: *const *const c_char, args_len
 			args
 		};
 
-		match parity_ethereum::Configuration::parse_cli(&args) {
+		match rteo::Configuration::parse_cli(&args) {
 			Ok(mut cfg) => {
 				// Always disable the auto-updater when used as a library.
 				cfg.args.arg_auto_update = "none".to_owned();
@@ -82,7 +82,7 @@ pub unsafe extern fn parity_config_from_cli(args: *const *const c_char, args_len
 #[no_mangle]
 pub unsafe extern fn parity_config_destroy(cfg: *mut c_void) {
 	let _ = panic::catch_unwind(|| {
-		let _cfg = Box::from_raw(cfg as *mut parity_ethereum::Configuration);
+		let _cfg = Box::from_raw(cfg as *mut rteo::Configuration);
 	});
 }
 
@@ -92,23 +92,23 @@ pub unsafe extern fn parity_start(cfg: *const ParityParams, output: *mut *mut c_
 		*output = ptr::null_mut();
 		let cfg: &ParityParams = &*cfg;
 
-		let config = Box::from_raw(cfg.configuration as *mut parity_ethereum::Configuration);
+		let config = Box::from_raw(cfg.configuration as *mut rteo::Configuration);
 
 		let on_client_restart_cb = {
 			let cb = CallbackStr(cfg.on_client_restart_cb, cfg.on_client_restart_cb_custom);
 			move |new_chain: String| { cb.call(&new_chain); }
 		};
 
-		let action = match parity_ethereum::start(*config, on_client_restart_cb, || {}) {
+		let action = match rteo::start(*config, on_client_restart_cb, || {}) {
 			Ok(action) => action,
 			Err(_) => return 1,
 		};
 
 		match action {
-			parity_ethereum::ExecutionAction::Instant(Some(s)) => { println!("{}", s); 0 },
-			parity_ethereum::ExecutionAction::Instant(None) => 0,
-			parity_ethereum::ExecutionAction::Running(client) => {
-				*output = Box::into_raw(Box::<parity_ethereum::RunningClient>::new(client)) as *mut c_void;
+			rteo::ExecutionAction::Instant(Some(s)) => { println!("{}", s); 0 },
+			rteo::ExecutionAction::Instant(None) => 0,
+			rteo::ExecutionAction::Running(client) => {
+				*output = Box::into_raw(Box::<rteo::RunningClient>::new(client)) as *mut c_void;
 				0
 			}
 		}
@@ -118,7 +118,7 @@ pub unsafe extern fn parity_start(cfg: *const ParityParams, output: *mut *mut c_
 #[no_mangle]
 pub unsafe extern fn parity_destroy(client: *mut c_void) {
 	let _ = panic::catch_unwind(|| {
-		let client = Box::from_raw(client as *mut parity_ethereum::RunningClient);
+		let client = Box::from_raw(client as *mut rteo::RunningClient);
 		client.shutdown();
 	});
 }
@@ -126,7 +126,7 @@ pub unsafe extern fn parity_destroy(client: *mut c_void) {
 #[no_mangle]
 pub unsafe extern fn parity_rpc(client: *mut c_void, query: *const c_char, len: usize, out_str: *mut c_char, out_len: *mut usize) -> c_int {
 	panic::catch_unwind(|| {
-		let client: &mut parity_ethereum::RunningClient = &mut *(client as *mut parity_ethereum::RunningClient);
+		let client: &mut rteo::RunningClient = &mut *(client as *mut rteo::RunningClient);
 
 		let query_str = {
 			let string = slice::from_raw_parts(query as *const u8, len);

@@ -24,7 +24,7 @@ extern crate fdlimit;
 #[macro_use]
 extern crate log;
 extern crate panic_hook;
-extern crate parity_ethereum;
+extern crate rteo;
 extern crate parking_lot;
 
 #[cfg(windows)] extern crate winapi;
@@ -40,7 +40,7 @@ use std::{process, env};
 use ctrlc::CtrlC;
 use dir::default_hypervisor_path;
 use fdlimit::raise_fd_limit;
-use parity_ethereum::{start, ExecutionAction};
+use rteo::{start, ExecutionAction};
 use parking_lot::{Condvar, Mutex};
 
 const PLEASE_RESTART_EXIT_CODE: i32 = 69;
@@ -181,7 +181,7 @@ fn main_direct(force_can_restart: bool) -> i32 {
 
 	let mut conf = {
 		let args = std::env::args().collect::<Vec<_>>();
-		parity_ethereum::Configuration::parse_cli(&args).unwrap_or_else(|e| e.exit())
+		rteo::Configuration::parse_cli(&args).unwrap_or_else(|e| e.exit())
 	};
 
 	if let Some(spec_override) = take_spec_name_override() {
