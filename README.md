@@ -3,19 +3,15 @@
 
 ----------------------
 
-# rteo is based on Parity - fast, light, and robust client
+# rTEO is based on Parity - fast, light, and robust client
 
 ##
 ##  Using Binary download
 ##  
-### [» Download the rteo windows release rteo.win10.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.win10.zip) 
-### [» Download the rteo Linux( > Ubuntu16.04 )   release rteo.linux.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.linux.zip) 
-##
-##  After download binary and unzip it
-  run examples
-```
- rteo --chain=teotest
-```
+
+[Go Binary Release tab](https://github.com/tao-foundation/rteo/releases)
+
+### Prepared for public mainnet releases v1.12.3
 
 
 ----------------------
@@ -36,8 +32,9 @@ Here is space of discussion for New TAO Universal Blockchain Architecture.
 * [TAO Foundation Forum](https://forum.tao.foundation)
 * [TEO Project  client repository](https://github.com/tao-foundation/rteo)
 * [TEO Material includes resources for TEO, you can arrive here](https://github.com/tao-foundation/teo-material)
-* [TEO Explorer](https://teoexplorer.tao.ac)
-* [TEO Wallet](https://wallet.tao.ac)
+* [TEO Explorer](https://explorer.tao.foundation) 
+* [TEO Explorer2](https://explorer2.tao.foundation) 
+* [TEO Wallet](https://wallet.tao.foundation)
 * [TEO Bounty Program v0.3](https://github.com/tao-foundation/teo-material/blob/master/documents/TEO-Airdrop-BountyProgram-v0.3.pdf)
 
 Please enjoy this projects,
@@ -59,7 +56,7 @@ You can do with rteo clients.
 
 ## Build dependencies
 
-**rteo requires Rust version 1.23.0 to build**
+**rteo requires Rust toolchain version 1.26.0 to build**
 
 We recommend installing Rust through [rustup](https://www.rustup.rs/). If you don't already have rustup, you can install it like this:
 
@@ -103,45 +100,25 @@ Make sure that these binaries are in your `PATH`. After that you should be able 
 $ git clone https://github.com/tao-foundation/rteo
 $ cd rteo
 
+# add rust toolchain v1.26.0
+$ rustup toolchain install 1.26.0 
+
+# set CL is should be need for windows10 MSVS builds, in linux no influences
+$ set CL="/wd5045"    
+
+$ cargo +1.26.0 build --release
 # build in release mode
 $ cargo build --release
 ```
 
 This will produce an executable in the `./target/release` subdirectory.
 
-Note: if cargo fails to parse manifest try:
 
-```bash
-$ ~/.cargo/bin/cargo build --release
-```
-
-Note: When compiling a crate and you receive the following error:
-
-```
-error: the crate is compiled with the panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
-```
-
-Cleaning the repository will most likely solve the issue, try:
+#### Cleaning the repository will most likely solve the issue, try:
 
 ```bash
 $ cargo clean
 ```
-
-This will always compile the latest nightly builds. If you want to build stable or beta, do a
-
-```bash
-$ git checkout stable
-```
-
-or
-
-```bash
-$ git checkout beta
-```
-
-first.
-
-----
 
 ## Start rteo
 
@@ -150,10 +127,11 @@ first.
 To start rteo testnet manually, just run
 
 ```bash
-$ ./target/release/rteo --chain=teotest
+$ ./target/release/rteo --chain=teo
 ```
 
 and rteo will begin syncing the TEO testnet blockchain.
+
 
 ### Using systemd service file
 
@@ -162,4 +140,17 @@ To start Parity as a regular user using systemd init:
 1. Copy `./scripts/rteo.service` to your
 systemd user directory (usually `~/.config/systemd/user`).
 2. To configure Parity, write a `${HOME}/config.toml` config file, see [Configuring rteo - it is most of options are compatible with parity](https://paritytech.github.io/wiki/Configuring-Parity) for details.
+
+
+--------------------
+
+##  TESTNET Old release binary download link
+### [» Download the rteo windows release rteo.win10.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.win10.zip) 
+### [» Download the rteo Linux( > Ubuntu16.04 )   release rteo.linux.zip «](https://github.com/tao-foundation/rteo/raw/master/target/release/rteo.linux.zip) 
+##
+##  After download binary and unzip it
+  run examples
+```
+ rteo --chain=teotest
+```
 
