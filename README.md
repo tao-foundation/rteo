@@ -106,9 +106,9 @@ $ rustup toolchain install 1.26.0
 # set CL is should be need for windows10 MSVS builds, in linux no influences
 $ set CL="/wd5045"    
 
-$ cargo +1.26.0 build --release
 # build in release mode
-$ cargo build --release
+$ cargo +1.26.0 build --release
+
 ```
 
 This will produce an executable in the `./target/release` subdirectory.
@@ -127,7 +127,10 @@ $ cargo clean
 To start rteo testnet manually, just run
 
 ```bash
+
 $ ./target/release/rteo --chain=teo
+
+
 ```
 
 and rteo will begin syncing the TEO testnet blockchain.
