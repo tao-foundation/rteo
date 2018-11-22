@@ -89,7 +89,7 @@ impl ClientService {
 		) -> Result<ClientService, Error>
 	{
 		let io_service = IoService::<ClientIoMessage>::start()?;
-		/// change PoW algorithm changed engine name
+		// change PoW algorithm changed engine name
 		let engine_name = "TEthashV1";
 		
 		info!("Configured for {} using {} engine", Colour::White.bold().paint(spec.name.clone()), Colour::Yellow.bold().paint(engine_name));

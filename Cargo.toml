@@ -1,10 +1,10 @@
 [package]
-description = "rteo Parity TEO client"
+description = "rTEO client"
 name = "rteo"
 # NOTE Make sure to update util/version/Cargo.toml as well
-version = "1.12.2"
+version = "1.12.3"
 license = "GPL-3.0"
-authors = ["trustfarm.io <info@trustfarm.net> , Parity Technologies <admin@parity.io>"]
+authors = ["TAO.foundation <admin@tao.foundation> , Trustfarm <info@trustfarm.net> , Parity Technologies <admin@parity.io>"]
 
 [dependencies]
 log = "0.3"
