@@ -89,7 +89,7 @@ Make sure that these binaries are in your `PATH`. After that you should be able 
 
 ----
 
-### We will not recommend to use snap. for old linux platforms [eg. <~ Ubuntu 14.04]
+### We will not recommend to use snap. for old linux platforms [eg. <= ~ Ubuntu 14.04], you use newer version than Ubuntu16
 
 ----
 
@@ -113,6 +113,7 @@ $ cargo +1.26.0 build --release
 
 This will produce an executable in the `./target/release` subdirectory.
 
+#### additional build information is on parity issues by @trustfarm-dev ,[#9728](https://github.com/paritytech/parity-ethereum/issues/9728)
 
 #### Cleaning the repository will most likely solve the issue, try:
 
