@@ -104,7 +104,7 @@ $ cd rteo
 $ rustup toolchain install 1.26.0 
 
 # set CL is should be need for windows10 MSVS builds, in linux no influences
-$ set CL="/wd5045"    
+$ set CL=/wd5045 /wd4668    
 
 # build in release mode
 $ cargo +1.26.0 build --release
